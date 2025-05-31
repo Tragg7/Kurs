@@ -1,0 +1,132 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Доставка Еды в Ногинске</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/main.css') }}">
+    <link rel="shortcut icon" href="../static/images/logo.svg"/>
+</head>
+{% block content %}
+    <header>
+        <div class="top-header">
+            <div class="container">
+                <div class="top-header-contact">
+                    <span>+7 999-999-99-99</span>
+                </div>
+            </div>
+        </div>
+        <nav class="navbar">
+            <br>
+            <br>
+            <div class="container">
+                <div class="logotype">
+                    <a href="#" class="logo">Столовка</a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#home">Главная</a></li>
+                    <li><a href="{{url_for('courier_routes.courier_panel')}}">Для курьеров</a></li>
+                    <li><a href="#menu">Меню</a></li>
+                </ul>
+                <div class="auth-cart">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('auth_routes.logout') }}" class="auth-btn">Выйти</a>
+                    {% else %}
+                        <a href="{{ url_for('auth_routes.login') }}" class="auth-btn">Войти</a>
+                    {% endif %}
+                    <a id="cart-link" href="{{ url_for('main_routes.cart') }}" class="cart-btn">Корзина</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <section id="home" class="banner">
+        <div class="overlay">
+            <div class="container">
+                <h1>Добро пожаловать в Столовку!</h1>
+                <br>
+                <a href="#menu" class="cta-btn">Заказать сейчас</a>
+            </div>
+        </div>
+    </section>
+    <section id="menu" class="menu">
+        <div class="container">
+            <h2>Наше Меню</h2>
+            <div class="category-buttons">
+                <button onclick="filterProducts('all')">Все</button>
+                <button onclick="filterProducts('Горячие блюда')">Горячие блюда</button>
+                <button onclick="filterProducts('Завтраки')">Завтраки</button>
+                <button onclick="filterProducts('Вторые блюда')">Вторые блюда</button>
+                <button onclick="filterProducts('Салаты')">Салаты</button>
+                <button onclick="filterProducts('Напитки')">Напитки</button>
+            </div>
+            <br>
+            <div class="menu-categories">
+                <ul id="product-list">
+                    {% for product in products %}
+                    <li class="product" data-category="{{ product[2] }}">
+                        <img src="{{ url_for('static', filename='uploads/' + product[3]) }}">
+                        <br>
+                        <h3>{{ product[0] }}</h3>
+                        <p>Цена: {{ product[1] }} руб.</p>
+                        <form method="post" action="{{ url_for('main_routes.cart') }}">
+                            <input type="hidden" name="product_name" value="{{ product[0] }}">
+                            <input type="hidden" name="product_price" value="{{ product[1] }}">
+                            <input type="hidden" name="product_type" value="{{ product[2] }}">
+                            <button type="submit" class="add-to-cart-btn">Добавить в корзину</button>
+                        </form>
+                    </li>
+                    {% endfor %}
+            </div>
+        </div>
+    </section>
+    <hr>
+    <script src="../static/scripts/menu.js"></script>
+    <section id="about" class="about">
+        <div class="container">
+            <h2>О нас</h2>
+            <p> Наша столовая — вкусно, сытно, по-домашнему!<br><br>
+                В столовой вас ждёт разнообразие блюд на каждый день:<br><br>
+                🍳 Завтраки — сытные и полезные, чтобы начать день с энергии. Каши, яичница, блины и многое другое.<br><br>
+                🍲 Горячие блюда — всегда свежие, вкусные и приготовлены с заботой.<br><br>
+                🥩 Вторые блюда — мясо, рыба, гарниры на выбор — найдётся по вкусу каждому.<br><br>
+                🥗 Салаты — лёгкие, витаминные и всегда свежие. Отличное дополнение к основному блюду.<br><br>
+                🥤 Напитки — компоты, морсы, чай, кофе и другие освежающие варианты.<br><br>
+                Уютная атмосфера, быстрое обслуживание и приятные цены — всё для того, чтобы ваш обед был не только вкусным, но и комфортным.<br></p>
+        </div>
+    </section>
+    <hr>
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-column">
+                <h3>О нас</h3>
+                <ul>
+                    <li><a href="#">О нас</a></li>
+                    <li><a href="#">Наша команда</a></li>
+                    <li><a href="#">Стань одним из нас</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Помощь</h3>
+                <ul>
+                    <li><a href="#faq">Частые вопросы</a></li>
+                    <li><a href="#support">Поддержка</a></li>
+                    <li><a href="#contact">Контакты</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Мы в социальных сетях</h3>
+                <ul>
+                    <li><a href="https://facebook.com" target="_blank">Facebook</a></li>
+                    <li><a href="https://instagram.com" target="_blank">Instagram</a></li>
+                    <li><a href="https://twitter.com" target="_blank">Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="container">
+            <p>&copy; Курсовая работа Юманов Евгений 2025 Ногинск.</p>
+        </div>
+    </footer>
+{% endblock %}
